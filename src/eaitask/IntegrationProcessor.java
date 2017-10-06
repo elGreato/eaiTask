@@ -1,12 +1,18 @@
 package eaitask;
 
 import java.rmi.RemoteException;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 import javax.xml.rpc.holders.FloatWrapperHolder;
 import javax.xml.rpc.holders.IntegerWrapperHolder;
 import javax.xml.rpc.holders.LongWrapperHolder;
 import javax.xml.rpc.holders.StringHolder;
+
+import java.sql.Connection;
 
 import ch.fhnw.www.wi.eai.bankjd.BankJD;
 import ch.fhnw.www.wi.eai.bankjd.BankJDProxy;
@@ -15,22 +21,51 @@ import eaitask.bankjd.BankJDTransaction;
 import eaitask.bankvct.BankVCTAccount;
 
 public class IntegrationProcessor {
+	private String dbUsername = "root";
+	private String dbPassword = "root";
+	
 	private ArrayList<BankJDSavings> jdSavings;
 	private ArrayList<BankJDTransaction> jdTransactions;
-	private ArrayList<BankVCTAccount> vctAccount;
+	private ArrayList<BankVCTAccount> vctAccounts;
 	
 	public void executeIntegration() {
 		
 		jdSavings = new ArrayList<BankJDSavings>();
 		jdTransactions = new ArrayList<BankJDTransaction>();
-		vctAccount = new ArrayList<BankVCTAccount>();
+		vctAccounts = new ArrayList<BankVCTAccount>();
 
 		retrieveBankJDData();
 		retrieveBankVCTData();
 		
 	}
 	private void retrieveBankVCTData() {
-		// TODO Auto-generated method stub
+		try {
+			Connection cn = DriverManager.getConnection("jdbc:mysql://localhost:3306/bankvct", dbUsername, dbPassword);
+			Statement stmt = cn.createStatement();
+			ResultSet rs = stmt.executeQuery("Select CustomerID, CustomerName, StreetName, ZIP,Town, Country, TypeOfCustomer, AccountNumber, Total, Clearing from account");
+			while(rs.next())
+			{
+				int customerID = rs.getInt("CustomerID");
+				String customerName = rs.getString("CustomerName");
+				String streetName = rs.getString("StreetName"); 
+				String zip = rs.getString("ZIP");
+				String town = rs.getString("Town"); 
+				String country = rs.getString("Country"); 
+				String typeOfCustomer = rs.getString("TypeOfCustomer"); 
+				long accountNumber = rs.getLong("AccountNumber"); 
+				float total = rs.getFloat("Total"); 
+				long clearing = rs.getLong("Clearing");
+				System.out.println(accountNumber);
+				BankVCTAccount vctacc = new BankVCTAccount(customerID, customerName, streetName, zip, town, country, typeOfCustomer,accountNumber, total, clearing);
+				vctAccounts.add(vctacc);
+			}
+			rs.close();
+			cn.close();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 	private void retrieveBankJDData() {
@@ -42,7 +77,7 @@ public class IntegrationProcessor {
 		} 
 		catch(RemoteException e)
 		{
-			
+			System.out.println("Could not retrieve webservice data.");
 		}
 
 		
@@ -84,8 +119,6 @@ public class IntegrationProcessor {
 			FloatWrapperHolder interestrate = new FloatWrapperHolder();
 			LongWrapperHolder accountnumber = new LongWrapperHolder();
 			LongWrapperHolder accountstatus = new LongWrapperHolder();
-			
-			StringHolder bic = new StringHolder();
 			
 			bankJDSource.retrieveSavings("", name, firstname, lastname, street, zipandtown, interestrate, accountnumber, accountstatus);
 			
