@@ -19,6 +19,9 @@ import ch.fhnw.www.wi.eai.bankjd.BankJDProxy;
 import eaitask.bankjd.BankJDSavings;
 import eaitask.bankjd.BankJDTransaction;
 import eaitask.bankvct.BankVCTAccount;
+import eaitask.bankvct.BankVCTConverter;
+import eaitask.targetsystem.TargetAccount;
+import eaitask.targetsystem.TargetUser;
 
 public class IntegrationProcessor {
 	private String dbUsername = "root";
@@ -28,6 +31,9 @@ public class IntegrationProcessor {
 	private ArrayList<BankJDTransaction> jdTransactions;
 	private ArrayList<BankVCTAccount> vctAccounts;
 	
+	private ArrayList<TargetUser> targetUsers;
+	private ArrayList<TargetAccount> targetAccounts;
+	
 	public void executeIntegration() {
 		
 		jdSavings = new ArrayList<BankJDSavings>();
@@ -36,6 +42,14 @@ public class IntegrationProcessor {
 
 		retrieveBankJDData();
 		retrieveBankVCTData();
+		
+		targetUsers = new ArrayList<TargetUser>();
+		targetAccounts = new ArrayList<TargetAccount>();
+		
+		BankVCTConverter vctConverter = new BankVCTConverter();
+		vctConverter.convert(vctAccounts, targetUsers, targetAccounts);
+		
+		
 		
 	}
 	private void retrieveBankVCTData() {
