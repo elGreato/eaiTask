@@ -9,9 +9,10 @@ public class Main {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		BankJD bank = new BankJDProxy();
+		BankJD bankJDData = new BankJDProxy();
 		try {
-			bank.printSavings();
+			bankJDData.printSavings();
+			bankJDData.printTransaction();
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
