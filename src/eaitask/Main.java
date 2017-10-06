@@ -9,6 +9,8 @@ public class Main {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
+		IntegrationProcessor ip = new IntegrationProcessor();
+		ip.executeIntegration();
 		BankJD bankJDData = new BankJDProxy();
 		try {
 			bankJDData.printSavings();
