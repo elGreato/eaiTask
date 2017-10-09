@@ -17,5 +17,17 @@ public class BankJDSavingsConverter {
 		this.jdSavings = jdSavings;
 		this.targetUsers = targetUsers;
 		this.targetAccounts = targetAccounts;
+		
+		for(BankJDSavings account: jdSavings)
+		{
+			if(userExists())
+			{
+				
+			}
+		}
+	}
+
+	private boolean userExists() {
+		return false;
 	}
 }
