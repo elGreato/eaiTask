@@ -20,14 +20,39 @@ public class BankJDSavingsConverter {
 		
 		for(BankJDSavings account: jdSavings)
 		{
-			if(userExists())
-			{
-				
-			}
+			TargetUser targetUser = createTargetUser(account);
+			TargetAccount targetAccount = createTargetAccount(account);
+			addToTargetSystem(targetUser, targetAccount);
 		}
 	}
 
-	private boolean userExists() {
-		return false;
+	private void addToTargetSystem(TargetUser targetUser,
+			TargetAccount targetAccount) {
+		boolean userExists = false;
+		getID(targetUser, targetAccount, userExists);
+		
+		targetAccounts.add(targetAccount);
+		if(!userExists)
+		{
+			targetUsers.add(targetUser);
+		}
 	}
+
+	private void getID(TargetUser targetUser, TargetAccount targetAccount,
+			boolean userExists) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private TargetAccount createTargetAccount(BankJDSavings account) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private TargetUser createTargetUser(BankJDSavings account) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	
 }
