@@ -6,9 +6,9 @@ import eaitask.targetsystem.TargetAccount;
 import eaitask.targetsystem.TargetCustomer;
 
 public class BankJDTransactionConverter {
-	ArrayList<BankJDTransaction> jdTransactions;
-	ArrayList<TargetCustomer> targetUsers;
-	ArrayList<TargetAccount> targetAccounts;
+	private ArrayList<BankJDTransaction> jdTransactions;
+	private ArrayList<TargetCustomer> targetUsers;
+	private ArrayList<TargetAccount> targetAccounts;
 	
 	public void convert(
 			ArrayList<BankJDTransaction> jdTransactions,

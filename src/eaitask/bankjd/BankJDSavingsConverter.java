@@ -5,20 +5,21 @@ import java.util.ArrayList;
 import eaitask.targetsystem.TargetAccount;
 import eaitask.targetsystem.TargetCustomer;
 import eaitask.targetsystem.TypeOfAccount;
+import ch.sic.ibantool.*;
 
 public class BankJDSavingsConverter {
-	ArrayList<BankJDSavings> jdSavings;
-	ArrayList<TargetCustomer> targetCustomers;
-	ArrayList<TargetAccount> targetAccounts;
-	
+	private ArrayList<BankJDSavings> jdSavings;
+	private ArrayList<TargetCustomer> targetCustomers;
+	private ArrayList<TargetAccount> targetAccounts;
+	private String BIC;
 	public void convert(
 			ArrayList<BankJDSavings> jdSavings,
 			ArrayList<TargetCustomer> targetCustomers,
-			ArrayList<TargetAccount> targetAccounts) {
+			ArrayList<TargetAccount> targetAccounts, String BIC) {
 		this.jdSavings = jdSavings;
 		this.targetCustomers = targetCustomers;
 		this.targetAccounts = targetAccounts;
-		
+		this.BIC = BIC;
 		for(BankJDSavings account: jdSavings)
 		{
 			TargetCustomer targetCustomer = createTargetUser(account);
@@ -56,8 +57,10 @@ public class BankJDSavingsConverter {
 	}
 
 	private TargetAccount createTargetAccount(BankJDSavings account) {
-		
-		return new TargetAccount(0,"",0,TypeOfAccount.SAVINGS);
+		Main ibanclass = new Main();
+		RecordIban recordiban = ibanclass.IBANConvert(new StringBuffer(BIC), new StringBuffer(Long.valueOf(account.getAccountnumber()).toString())); 
+		StringBuffer iban = recordiban.Iban;
+		return new TargetAccount(iban.toString(),account.getAccountstatus(),TypeOfAccount.SAVINGS);
 	}
 
 	private TargetCustomer createTargetUser(BankJDSavings account) {

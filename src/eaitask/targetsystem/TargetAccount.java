@@ -4,7 +4,7 @@ public class TargetAccount {
 	private int cid;
 	private String iban;
 	private float accountbalance;
-	TypeOfAccount typeofaccount;
+	private TypeOfAccount typeofaccount;
 	
 	public TargetAccount(int cid, String iban, float accountbalance,
 			TypeOfAccount typeofaccount) {
@@ -14,7 +14,13 @@ public class TargetAccount {
 		this.accountbalance = accountbalance;
 		this.typeofaccount = typeofaccount;
 	}
-
+	public TargetAccount(String iban, float accountbalance,
+			TypeOfAccount typeofaccount) {
+		super();
+		this.iban = iban;
+		this.accountbalance = accountbalance;
+		this.typeofaccount = typeofaccount;
+	}
 	public int getCid() {
 		return cid;
 	}
@@ -46,6 +52,14 @@ public class TargetAccount {
 	public void setTypeofaccount(TypeOfAccount typeofaccount) {
 		this.typeofaccount = typeofaccount;
 	}
-	
+	public void print()
+	{
+		System.out.println("Account:");
+		System.out.println("CID: " + cid);
+		System.out.println("IBAN: " + iban);
+		System.out.println("Account Balance: " + accountbalance);
+		System.out.println("Type of Account: " + TypeOfAccount.print(typeofaccount));
+		System.out.println("***********");
+	}
 	
 }

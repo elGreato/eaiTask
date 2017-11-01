@@ -6,9 +6,9 @@ import eaitask.targetsystem.TargetAccount;
 import eaitask.targetsystem.TargetCustomer;
 
 public class BankVCTConverter {
-	ArrayList<BankVCTAccount> vctAccounts;
-	ArrayList<TargetCustomer> targetUsers;
-	ArrayList<TargetAccount> targetAccounts;
+	private ArrayList<BankVCTAccount> vctAccounts;
+	private ArrayList<TargetCustomer> targetUsers;
+	private ArrayList<TargetAccount> targetAccounts;
 	public void convert(ArrayList<BankVCTAccount> vctAccounts, ArrayList<TargetCustomer> targetUsers, ArrayList<TargetAccount> targetAccounts)
 	{
 		this.vctAccounts = vctAccounts;

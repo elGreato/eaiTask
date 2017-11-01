@@ -50,7 +50,7 @@ public class IntegrationProcessor {
 		BankVCTConverter vctConverter = new BankVCTConverter();
 		vctConverter.convert(vctAccounts, targetCustomers, targetAccounts);
 		BankJDSavingsConverter jdSavingsConverter = new BankJDSavingsConverter();
-		jdSavingsConverter.convert(jdSavings, targetCustomers, targetAccounts);
+		jdSavingsConverter.convert(jdSavings, targetCustomers, targetAccounts, jdTransactions.get(0).getBIC());
 		
 		System.out.println("********************");
 		System.out.println("CUSTOMER TABLE");
@@ -61,7 +61,14 @@ public class IntegrationProcessor {
 		}
 		System.out.println("********************");
 		
-		
+		System.out.println("********************");
+		System.out.println("ACCOUNTS TABLE");
+		System.out.println("********************");
+		for(TargetAccount ta: targetAccounts)
+		{
+			ta.print();
+		}
+		System.out.println("********************");
 	}
 	private void retrieveBankVCTData() {
 		try {
