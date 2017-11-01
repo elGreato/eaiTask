@@ -1,6 +1,6 @@
 package eaitask.targetsystem;
 
-public class TargetUser {
+public class TargetCustomer {
 	private int cid;
 	private String firstname;
 	private String lastname;
@@ -8,7 +8,15 @@ public class TargetUser {
 	private String countrycode;
 	private Status status;
 	
-	public TargetUser(int cid, String firstname, String lastname,
+	public TargetCustomer(String firstname, String lastname,
+			String address, String countrycode) {
+		super();
+		this.firstname = firstname;
+		this.lastname = lastname;
+		this.address = address;
+		this.countrycode = countrycode;
+	}
+	public TargetCustomer(int cid, String firstname, String lastname,
 			String address, String countrycode, Status status) {
 		super();
 		this.cid = cid;
@@ -18,7 +26,27 @@ public class TargetUser {
 		this.countrycode = countrycode;
 		this.status = status;
 	}
-
+	@Override
+	public boolean equals(Object o)
+	{
+		if(o instanceof TargetCustomer)
+		{
+			TargetCustomer compCustomer = (TargetCustomer)o;
+			if(compCustomer.getFirstname().charAt(0) == this.getFirstname().charAt(0)&&compCustomer.getLastname().equals(this.getLastname())&&compCustomer.getAddress().equals(this.getAddress()))
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+					
+		}
+		else
+		{
+			return super.equals(o);
+		}
+	}
 	public int getCid() {
 		return cid;
 	}
@@ -65,5 +93,14 @@ public class TargetUser {
 
 	public void setStatus(Status status) {
 		this.status = status;
+	}
+	public void print() {
+		System.out.println("Customer:");
+		System.out.println("CID: " + cid);
+		System.out.println("First name: " + firstname);
+		System.out.println("Last name: " + lastname);
+		System.out.println("Address: " + address);
+		System.out.println("Country Code: " + countrycode);
+		System.out.println("***********");
 	}
 }

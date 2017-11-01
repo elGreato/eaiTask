@@ -17,11 +17,12 @@ import java.sql.Connection;
 import ch.fhnw.www.wi.eai.bankjd.BankJD;
 import ch.fhnw.www.wi.eai.bankjd.BankJDProxy;
 import eaitask.bankjd.BankJDSavings;
+import eaitask.bankjd.BankJDSavingsConverter;
 import eaitask.bankjd.BankJDTransaction;
 import eaitask.bankvct.BankVCTAccount;
 import eaitask.bankvct.BankVCTConverter;
 import eaitask.targetsystem.TargetAccount;
-import eaitask.targetsystem.TargetUser;
+import eaitask.targetsystem.TargetCustomer;
 
 public class IntegrationProcessor {
 	private String dbUsername = "root";
@@ -31,7 +32,7 @@ public class IntegrationProcessor {
 	private ArrayList<BankJDTransaction> jdTransactions;
 	private ArrayList<BankVCTAccount> vctAccounts;
 	
-	private ArrayList<TargetUser> targetUsers;
+	private ArrayList<TargetCustomer> targetCustomers;
 	private ArrayList<TargetAccount> targetAccounts;
 	
 	public void executeIntegration() {
@@ -43,12 +44,22 @@ public class IntegrationProcessor {
 		retrieveBankJDData();
 		retrieveBankVCTData();
 		
-		targetUsers = new ArrayList<TargetUser>();
+		targetCustomers = new ArrayList<TargetCustomer>();
 		targetAccounts = new ArrayList<TargetAccount>();
 		
 		BankVCTConverter vctConverter = new BankVCTConverter();
-		vctConverter.convert(vctAccounts, targetUsers, targetAccounts);
+		vctConverter.convert(vctAccounts, targetCustomers, targetAccounts);
+		BankJDSavingsConverter jdSavingsConverter = new BankJDSavingsConverter();
+		jdSavingsConverter.convert(jdSavings, targetCustomers, targetAccounts);
 		
+		System.out.println("********************");
+		System.out.println("CUSTOMER TABLE");
+		System.out.println("********************");
+		for(TargetCustomer tu: targetCustomers)
+		{
+			tu.print();
+		}
+		System.out.println("********************");
 		
 		
 	}
@@ -69,7 +80,6 @@ public class IntegrationProcessor {
 				long accountNumber = rs.getLong("AccountNumber"); 
 				float total = rs.getFloat("Total"); 
 				long clearing = rs.getLong("Clearing");
-				System.out.println(accountNumber);
 				BankVCTAccount vctacc = new BankVCTAccount(customerID, customerName, streetName, zip, town, country, typeOfCustomer,accountNumber, total, clearing);
 				vctAccounts.add(vctacc);
 			}
@@ -116,7 +126,6 @@ public class IntegrationProcessor {
 			BankJDTransaction jdTrans = new BankJDTransaction(firstname.value, lastname.value, address.value, country.value, 
 					ranking.value, ibannumber.value, accountstatus.value, bic.value);
 			jdTransactions.add(jdTrans);
-			System.out.println("Done: " + lastname.value);
 			
 		}
 		
@@ -139,7 +148,6 @@ public class IntegrationProcessor {
 			BankJDSavings jdTrans = new BankJDSavings(firstname.value, lastname.value, street.value, zipandtown.value, 
 					interestrate.value, accountnumber.value, accountstatus.value);
 			jdSavings.add(jdTrans);
-			System.out.println("Done: " + lastname.value);
 			
 		}
 		
