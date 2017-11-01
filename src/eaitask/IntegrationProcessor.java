@@ -35,6 +35,9 @@ public class IntegrationProcessor {
 	private ArrayList<TargetCustomer> targetCustomers;
 	private ArrayList<TargetAccount> targetAccounts;
 	
+	public static double dollarExchangeRate = 1; //CHANGE DEC 1
+	public static double euroExchangeRage = 0.85; //CHANGE DEC 1
+	
 	public void executeIntegration() {
 		
 		jdSavings = new ArrayList<BankJDSavings>();
@@ -50,7 +53,7 @@ public class IntegrationProcessor {
 		BankVCTConverter vctConverter = new BankVCTConverter();
 		vctConverter.convert(vctAccounts, targetCustomers, targetAccounts);
 		BankJDSavingsConverter jdSavingsConverter = new BankJDSavingsConverter();
-		jdSavingsConverter.convert(jdSavings, targetCustomers, targetAccounts, jdTransactions.get(0).getBIC());
+		jdSavingsConverter.convert(jdSavings, targetCustomers, targetAccounts, jdTransactions.get(1).getBIC());
 		
 		System.out.println("********************");
 		System.out.println("CUSTOMER TABLE");
