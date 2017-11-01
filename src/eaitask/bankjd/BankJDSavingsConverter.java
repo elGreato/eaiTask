@@ -3,55 +3,69 @@ package eaitask.bankjd;
 import java.util.ArrayList;
 
 import eaitask.targetsystem.TargetAccount;
-import eaitask.targetsystem.TargetUser;
+import eaitask.targetsystem.TargetCustomer;
+import eaitask.targetsystem.TypeOfAccount;
 
 public class BankJDSavingsConverter {
 	ArrayList<BankJDSavings> jdSavings;
-	ArrayList<TargetUser> targetUsers;
+	ArrayList<TargetCustomer> targetCustomers;
 	ArrayList<TargetAccount> targetAccounts;
 	
 	public void convert(
 			ArrayList<BankJDSavings> jdSavings,
-			ArrayList<TargetUser> targetUsers,
+			ArrayList<TargetCustomer> targetCustomers,
 			ArrayList<TargetAccount> targetAccounts) {
 		this.jdSavings = jdSavings;
-		this.targetUsers = targetUsers;
+		this.targetCustomers = targetCustomers;
 		this.targetAccounts = targetAccounts;
 		
 		for(BankJDSavings account: jdSavings)
 		{
-			TargetUser targetUser = createTargetUser(account);
+			TargetCustomer targetCustomer = createTargetUser(account);
 			TargetAccount targetAccount = createTargetAccount(account);
-			addToTargetSystem(targetUser, targetAccount);
+			addToTargetSystem(targetCustomer, targetAccount);
 		}
 	}
 
-	private void addToTargetSystem(TargetUser targetUser,
+	private void addToTargetSystem(TargetCustomer targetCustomer,
 			TargetAccount targetAccount) {
-		boolean userExists = false;
-		getID(targetUser, targetAccount, userExists);
-		
+		int id = getID(targetCustomer, targetAccount);
+		targetAccount.setCid(id);
 		targetAccounts.add(targetAccount);
-		if(!userExists)
+		if(id==targetCustomers.size())
 		{
-			targetUsers.add(targetUser);
+			targetCustomer.setCid(id);
+			targetCustomers.add(targetCustomer);
+		}
+		else if(targetCustomers.get(id).getFirstname().matches("^[A-Z]\\.$"))
+		{
+			targetCustomers.get(id).setFirstname(targetCustomer.getFirstname());
 		}
 	}
 
-	private void getID(TargetUser targetUser, TargetAccount targetAccount,
-			boolean userExists) {
-		// TODO Auto-generated method stub
+	private int getID(TargetCustomer userProcessed, TargetAccount targetAccount) {
 		
+		for (TargetCustomer listUser : targetCustomers)
+		{
+			if(userProcessed.equals(listUser))
+			{
+				return listUser.getCid();
+			}
+		}
+		return targetCustomers.size();
 	}
 
 	private TargetAccount createTargetAccount(BankJDSavings account) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		return new TargetAccount(0,"",0,TypeOfAccount.SAVINGS);
 	}
 
-	private TargetUser createTargetUser(BankJDSavings account) {
-		// TODO Auto-generated method stub
-		return null;
+	private TargetCustomer createTargetUser(BankJDSavings account) {
+		String address = account.getStreet() + ", " + account.getZipandtown();
+
+		TargetCustomer targetCustomer = new TargetCustomer(account.getFirstname(),account.getLastname(),address,"DE");
+		
+		return targetCustomer;
 	}
 
 	

@@ -3,13 +3,13 @@ package eaitask.bankvct;
 import java.util.ArrayList;
 
 import eaitask.targetsystem.TargetAccount;
-import eaitask.targetsystem.TargetUser;
+import eaitask.targetsystem.TargetCustomer;
 
 public class BankVCTConverter {
 	ArrayList<BankVCTAccount> vctAccounts;
-	ArrayList<TargetUser> targetUsers;
+	ArrayList<TargetCustomer> targetUsers;
 	ArrayList<TargetAccount> targetAccounts;
-	public void convert(ArrayList<BankVCTAccount> vctAccounts, ArrayList<TargetUser> targetUsers, ArrayList<TargetAccount> targetAccounts)
+	public void convert(ArrayList<BankVCTAccount> vctAccounts, ArrayList<TargetCustomer> targetUsers, ArrayList<TargetAccount> targetAccounts)
 	{
 		this.vctAccounts = vctAccounts;
 		this.targetUsers = targetUsers;
