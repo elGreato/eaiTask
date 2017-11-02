@@ -59,7 +59,7 @@ public class TargetAccount {
 		System.out.println("IBAN: " + iban);
 		System.out.println("Account Balance: " + accountbalance);
 		System.out.println("Type of Account: " + TypeOfAccount.print(typeofaccount));
-		System.out.println("***********");
+		
 	}
 	
 }

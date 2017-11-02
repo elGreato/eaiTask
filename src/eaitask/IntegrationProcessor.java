@@ -19,6 +19,7 @@ import ch.fhnw.www.wi.eai.bankjd.BankJDProxy;
 import eaitask.bankjd.BankJDSavings;
 import eaitask.bankjd.BankJDSavingsConverter;
 import eaitask.bankjd.BankJDTransaction;
+import eaitask.bankjd.BankJDTransactionConverter;
 import eaitask.bankvct.BankVCTAccount;
 import eaitask.bankvct.BankVCTConverter;
 import eaitask.targetsystem.TargetAccount;
@@ -54,24 +55,45 @@ public class IntegrationProcessor {
 		vctConverter.convert(vctAccounts, targetCustomers, targetAccounts);
 		BankJDSavingsConverter jdSavingsConverter = new BankJDSavingsConverter();
 		jdSavingsConverter.convert(jdSavings, targetCustomers, targetAccounts, jdTransactions.get(1).getBIC());
+		BankJDTransactionConverter jdTransactionConverter = new BankJDTransactionConverter();
+		jdTransactionConverter.convert(jdTransactions,targetCustomers, targetAccounts);
 		
-		System.out.println("********************");
-		System.out.println("CUSTOMER TABLE");
-		System.out.println("********************");
-		for(TargetCustomer tu: targetCustomers)
-		{
-			tu.print();
-		}
-		System.out.println("********************");
 		
+		printCustomers();
+		printAccounts();
+		
+		
+
+	}
+
+		
+	
+	private void printAccounts() {
 		System.out.println("********************");
 		System.out.println("ACCOUNTS TABLE");
 		System.out.println("********************");
+		System.out.println("***********");
 		for(TargetAccount ta: targetAccounts)
 		{
 			ta.print();
+			System.out.println("***********");
 		}
 		System.out.println("********************");
+		System.out.println();
+		
+	}
+	private void printCustomers() {
+		System.out.println("********************");
+		System.out.println("CUSTOMER TABLE");
+		System.out.println("********************");
+		System.out.println("***********");
+		for(TargetCustomer tu: targetCustomers)
+		{
+			tu.print();
+			System.out.println("***********");
+		}
+		System.out.println("********************");
+		System.out.println();
 	}
 	private void retrieveBankVCTData() {
 		try {

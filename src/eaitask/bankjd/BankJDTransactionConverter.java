@@ -2,20 +2,65 @@ package eaitask.bankjd;
 
 import java.util.ArrayList;
 
+import eaitask.IntegrationProcessor;
 import eaitask.targetsystem.TargetAccount;
 import eaitask.targetsystem.TargetCustomer;
+import eaitask.targetsystem.TypeOfAccount;
 
 public class BankJDTransactionConverter {
 	private ArrayList<BankJDTransaction> jdTransactions;
-	private ArrayList<TargetCustomer> targetUsers;
+	private ArrayList<TargetCustomer> targetCustomers;
 	private ArrayList<TargetAccount> targetAccounts;
 	
 	public void convert(
 			ArrayList<BankJDTransaction> jdTransactions,
-			ArrayList<TargetCustomer> targetUsers,
+			ArrayList<TargetCustomer> targetCustomers,
 			ArrayList<TargetAccount> targetAccounts) {
 		this.jdTransactions = jdTransactions;
-		this.targetUsers = targetUsers;
+		this.targetCustomers = targetCustomers;
 		this.targetAccounts = targetAccounts;
+		for(BankJDTransaction account: jdTransactions)
+		{
+			TargetCustomer targetCustomer = createTargetUser(account);
+			TargetAccount targetAccount = createTargetAccount(account);
+			addToTargetSystem(targetCustomer, targetAccount);
+		}
+	}
+
+
+
+	private TargetAccount createTargetAccount(BankJDTransaction account) {
+		
+		TargetAccount targetAccount = new TargetAccount(account.getIbannumber(), (float) (account.getAccountstatus()*IntegrationProcessor.dollarExchangeRate), TypeOfAccount.TRANSACTION);
+		return targetAccount;
+	}
+
+	private TargetCustomer createTargetUser(BankJDTransaction account) {
+		TargetCustomer targetCustomer = new TargetCustomer(account.getFirstname(), account.getLastname(),account.getAddress(),account.getCountry());
+		return targetCustomer;
+	}
+	private void addToTargetSystem(TargetCustomer targetCustomer,
+			TargetAccount targetAccount) {
+		int id = getID(targetCustomer, targetAccount);
+		targetAccount.setCid(id);
+		targetAccounts.add(targetAccount);
+		if(id==targetCustomers.size())
+		{
+			targetCustomer.setCid(id);
+			targetCustomers.add(targetCustomer);
+		}
+	}
+
+
+
+	private int getID(TargetCustomer userProcessed, TargetAccount targetAccount) {
+		for (TargetCustomer listUser : targetCustomers)
+		{
+			if(userProcessed.equals(listUser))
+			{
+				return listUser.getCid();
+			}
+		}
+		return targetCustomers.size();
 	}
 }

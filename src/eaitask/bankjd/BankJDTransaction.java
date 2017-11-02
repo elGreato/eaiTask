@@ -12,7 +12,7 @@ public class BankJDTransaction {
 	
 	public BankJDTransaction(String firstname, String lastname, String address,
 			String country, int ranking, String ibannumber,
-			float accountstatus, String bIC) {
+			float accountstatus, String BIC) {
 		super();
 		this.firstname = firstname;
 		this.lastname = lastname;
@@ -21,7 +21,7 @@ public class BankJDTransaction {
 		this.ranking = ranking;
 		this.ibannumber = ibannumber;
 		this.accountstatus = accountstatus;
-		BIC = bIC;
+		this.BIC = BIC;
 	}
 	public String getFirstname() {
 		return firstname;

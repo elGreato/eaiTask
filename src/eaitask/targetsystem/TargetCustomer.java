@@ -101,6 +101,5 @@ public class TargetCustomer {
 		System.out.println("Last name: " + lastname);
 		System.out.println("Address: " + address);
 		System.out.println("Country Code: " + countrycode);
-		System.out.println("***********");
 	}
 }

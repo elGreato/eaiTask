@@ -2,6 +2,7 @@ package eaitask.bankjd;
 
 import java.util.ArrayList;
 
+import eaitask.IntegrationProcessor;
 import eaitask.targetsystem.TargetAccount;
 import eaitask.targetsystem.TargetCustomer;
 import eaitask.targetsystem.TypeOfAccount;
@@ -60,7 +61,7 @@ public class BankJDSavingsConverter {
 		Main ibanclass = new Main();
 		RecordIban recordiban = ibanclass.IBANConvert(new StringBuffer(BIC), new StringBuffer(Long.valueOf(account.getAccountnumber()).toString())); 
 		StringBuffer iban = recordiban.Iban;
-		return new TargetAccount(iban.toString(),account.getAccountstatus(),TypeOfAccount.SAVINGS);
+		return new TargetAccount(iban.toString(),(float)(account.getAccountstatus()*IntegrationProcessor.dollarExchangeRate),TypeOfAccount.SAVINGS);
 	}
 
 	private TargetCustomer createTargetUser(BankJDSavings account) {
