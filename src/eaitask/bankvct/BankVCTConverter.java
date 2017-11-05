@@ -36,7 +36,7 @@ public class BankVCTConverter {
 
 	}
 
-	// Read VCT accounts
+	// Read VCT accounts -- can be removed later
 	private void readData() {
 
 		String csv = "/BankVCT.csv";
@@ -126,9 +126,9 @@ public class BankVCTConverter {
 		float accountBalance = c.getTotal();
 		TypeOfAccount type = TypeOfAccount.TRANSACTION;
 
-		TargetAccount ta = new TargetAccount(id, iban.toString(), accountBalance, type);
+		TargetAccount ta = new TargetAccount(id, iban.toString(), (float) (accountBalance*IntegrationProcessor.dollarExchangeRate), type);
 
-		return null;
+		return ta;
 
 	}
 
