@@ -3,6 +3,7 @@ package eaitask.bankvct;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import ch.sic.ibantool.RecordIban;
 import eaitask.IntegrationProcessor;
@@ -23,10 +24,10 @@ public class BankVCTConverter {
 		this.targetCustomers = targetUsers;
 		this.targetAccounts = targetAccounts;
 
-		readData();
+		//readData();
 
 		for (BankVCTAccount c : vctAccounts) {
-			if (c.getTypeofcustomer().equalsIgnoreCase("firma")) {
+			if (!c.getTypeofcustomer().equalsIgnoreCase("firma")) {
 				TargetCustomer targetCustomer = createTargetCustomer(c);
 				TargetAccount targetAccount = createTargetAccount(c);
 				addToTargetSystem(targetCustomer, targetAccount);
@@ -37,41 +38,41 @@ public class BankVCTConverter {
 	}
 
 	// Read VCT accounts -- can be removed later
-	private void readData() {
-
-		String csv = "/BankVCT.csv";
-		BufferedReader br = null;
-		String line = "";
-		String cvsSplitBy = ",";
-
-		try {
-
-			br = new BufferedReader(new FileReader(csv));
-			while ((line = br.readLine()) != null) {
-
-				// use comma as separator
-				String[] result = line.split(cvsSplitBy);
-				BankVCTAccount account = new BankVCTAccount(Integer.parseInt(result[0]), result[1], result[2], result[3], 
-						result[4], result[5], result[6], Long.parseLong(result[7]), Float.parseFloat(result[8]), Long.parseLong(result[9]));
-				
-				vctAccounts.add(account);
-				
-
-			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (br != null) {
-				try {
-					br.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-
-			}
-		}
-	}
+//	private void readData() {
+//
+//		String csv = "/BankVCT.csv";
+//		BufferedReader br = null;
+//		String line = "";
+//		String cvsSplitBy = ",";
+//
+//		try {
+//
+//			br = new BufferedReader(new FileReader(csv));
+//			while ((line = br.readLine()) != null) {
+//
+//				// use comma as separator
+//				String[] result = line.split(cvsSplitBy);
+//				BankVCTAccount account = new BankVCTAccount(Integer.parseInt(result[0]), result[1], result[2], result[3], 
+//						result[4], result[5], result[6], Long.parseLong(result[7]), Float.parseFloat(result[8]), Long.parseLong(result[9]));
+//				
+//				vctAccounts.add(account);
+//				
+//
+//			}
+//
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		} finally {
+//			if (br != null) {
+//				try {
+//					br.close();
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//
+//			}
+//		}
+//	}
 
 	private TargetCustomer createTargetCustomer(BankVCTAccount c) {
 
@@ -100,8 +101,15 @@ public class BankVCTConverter {
 			status = Status.SILBER;
 		else
 			status = Status.GOLD;
-
-		String countryCode = iban.toString().substring(0, 2);
+		String countryCode = new String();
+		for(String cc : Locale.getISOCountries())
+		{
+			if((new Locale("",cc)).getDisplayCountry(new Locale("de","CH")).toLowerCase().equals(c.getState().toLowerCase())||
+					(new Locale("",cc)).getDisplayCountry(new Locale("en_US","CH")).toLowerCase().equals(c.getState().toLowerCase()))
+			{
+				countryCode = cc;
+			}
+		}
 
 		TargetCustomer customer = new TargetCustomer(id, firstName, lastName, address, countryCode, status);
 
@@ -126,7 +134,7 @@ public class BankVCTConverter {
 		float accountBalance = c.getTotal();
 		TypeOfAccount type = TypeOfAccount.TRANSACTION;
 
-		TargetAccount ta = new TargetAccount(id, iban.toString(), (float) (accountBalance*IntegrationProcessor.dollarExchangeRate), type);
+		TargetAccount ta = new TargetAccount(id, iban.Iban.toString(), (float) (accountBalance*IntegrationProcessor.dollarExchangeRate), type);
 
 		return ta;
 
