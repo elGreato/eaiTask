@@ -11,14 +11,16 @@ public class BankJDTransactionConverter {
 	private ArrayList<BankJDTransaction> jdTransactions;
 	private ArrayList<TargetCustomer> targetCustomers;
 	private ArrayList<TargetAccount> targetAccounts;
-	
+	private int nextID;
 	public void convert(
 			ArrayList<BankJDTransaction> jdTransactions,
 			ArrayList<TargetCustomer> targetCustomers,
-			ArrayList<TargetAccount> targetAccounts) {
+			ArrayList<TargetAccount> targetAccounts,
+			int nextID) {
 		this.jdTransactions = jdTransactions;
 		this.targetCustomers = targetCustomers;
 		this.targetAccounts = targetAccounts;
+		this.nextID = nextID;
 		for(BankJDTransaction account: jdTransactions)
 		{
 			TargetCustomer targetCustomer = createTargetUser(account);
@@ -44,7 +46,7 @@ public class BankJDTransactionConverter {
 		int id = getID(targetCustomer, targetAccount);
 		targetAccount.setCid(id);
 		targetAccounts.add(targetAccount);
-		if(id==targetCustomers.size())
+		if(id>targetCustomers.get(targetCustomers.size()-1).getCid())
 		{
 			targetCustomer.setCid(id);
 			targetCustomers.add(targetCustomer);
@@ -61,6 +63,6 @@ public class BankJDTransactionConverter {
 				return listUser.getCid();
 			}
 		}
-		return targetCustomers.size();
+		return nextID++;
 	}
 }

@@ -13,14 +13,16 @@ public class BankJDSavingsConverter {
 	private ArrayList<TargetCustomer> targetCustomers;
 	private ArrayList<TargetAccount> targetAccounts;
 	private String BIC;
+	private int nextID;
 	public void convert(
 			ArrayList<BankJDSavings> jdSavings,
 			ArrayList<TargetCustomer> targetCustomers,
-			ArrayList<TargetAccount> targetAccounts, String BIC) {
+			ArrayList<TargetAccount> targetAccounts, String BIC, int nextID) {
 		this.jdSavings = jdSavings;
 		this.targetCustomers = targetCustomers;
 		this.targetAccounts = targetAccounts;
 		this.BIC = BIC;
+		this.nextID = nextID;
 		for(BankJDSavings account: jdSavings)
 		{
 			TargetCustomer targetCustomer = createTargetUser(account);
@@ -34,14 +36,22 @@ public class BankJDSavingsConverter {
 		int id = getID(targetCustomer, targetAccount);
 		targetAccount.setCid(id);
 		targetAccounts.add(targetAccount);
-		if(id==targetCustomers.size())
+		if(id>targetCustomers.get(targetCustomers.size()-1).getCid())
 		{
 			targetCustomer.setCid(id);
 			targetCustomers.add(targetCustomer);
 		}
-		else if(targetCustomers.get(id).getFirstname().matches("^[A-Z]\\.$"))
+		else 
 		{
-			targetCustomers.get(id).setFirstname(targetCustomer.getFirstname());
+			for(TargetCustomer tc : targetCustomers)
+			{
+				if(id == tc.getCid() && tc.getFirstname().matches("^[A-Z]\\.$"))
+				{
+					targetCustomers.get(id).setFirstname(targetCustomer.getFirstname());
+				}
+					
+			}
+			
 		}
 	}
 
@@ -54,7 +64,7 @@ public class BankJDSavingsConverter {
 				return listUser.getCid();
 			}
 		}
-		return targetCustomers.size();
+		return nextID++;
 	}
 
 	private TargetAccount createTargetAccount(BankJDSavings account) {

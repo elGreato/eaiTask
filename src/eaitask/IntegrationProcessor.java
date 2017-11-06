@@ -54,9 +54,9 @@ public class IntegrationProcessor {
 		BankVCTConverter vctConverter = new BankVCTConverter();
 		vctConverter.convert(vctAccounts, targetCustomers, targetAccounts);
 		BankJDSavingsConverter jdSavingsConverter = new BankJDSavingsConverter();
-		jdSavingsConverter.convert(jdSavings, targetCustomers, targetAccounts, jdTransactions.get(1).getBIC());
+		jdSavingsConverter.convert(jdSavings, targetCustomers, targetAccounts, jdTransactions.get(1).getBIC(),vctAccounts.get(vctAccounts.size()-1).getCustomerID()+1);		
 		BankJDTransactionConverter jdTransactionConverter = new BankJDTransactionConverter();
-		jdTransactionConverter.convert(jdTransactions,targetCustomers, targetAccounts);
+		jdTransactionConverter.convert(jdTransactions,targetCustomers, targetAccounts,targetCustomers.get(targetCustomers.size()-1).getCid()+1);
 		
 		
 		printCustomers();
