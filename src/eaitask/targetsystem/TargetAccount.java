@@ -1,6 +1,6 @@
 package eaitask.targetsystem;
 
-public class TargetAccount {
+public class TargetAccount implements Comparable<TargetAccount>{
 	private int cid;
 	private String iban;
 	private float accountbalance;
@@ -60,6 +60,10 @@ public class TargetAccount {
 		System.out.println("Account Balance: " + accountbalance);
 		System.out.println("Type of Account: " + TypeOfAccount.print(typeofaccount));
 		
+	}
+	@Override
+	public int compareTo(TargetAccount targetAccount2) {
+		return this.getCid() - targetAccount2.getCid();
 	}
 	
 }

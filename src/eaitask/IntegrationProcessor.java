@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import javax.xml.rpc.holders.FloatWrapperHolder;
 import javax.xml.rpc.holders.IntegerWrapperHolder;
@@ -58,6 +60,7 @@ public class IntegrationProcessor {
 		BankJDTransactionConverter jdTransactionConverter = new BankJDTransactionConverter();
 		jdTransactionConverter.convert(jdTransactions,targetCustomers, targetAccounts,targetCustomers.get(targetCustomers.size()-1).getCid()+1);
 		
+		Collections.sort((List<TargetAccount>)targetAccounts);;
 		
 		printCustomers();
 		printAccounts();

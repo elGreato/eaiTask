@@ -32,8 +32,12 @@ public class TargetCustomer {
 		if(o instanceof TargetCustomer)
 		{
 			TargetCustomer compCustomer = (TargetCustomer)o;
-			if(!compCustomer.getFirstname().isEmpty()&&!compCustomer.getLastname().isEmpty()&&!compCustomer.getAddress().isEmpty()&&
-					compCustomer.getFirstname().charAt(0) == this.getFirstname().charAt(0)&&compCustomer.getLastname().equals(this.getLastname())&&compCustomer.getAddress().equals(this.getAddress()))
+			if(!compCustomer.getFirstname().isEmpty()&&
+					!compCustomer.getLastname().isEmpty()&&
+					!compCustomer.getAddress().isEmpty()&&
+					compCustomer.getFirstname().charAt(0) == this.getFirstname().charAt(0)&&
+					compCustomer.getLastname().equals(this.getLastname())&&
+					compCustomer.getAddress().equals(this.getAddress()))
 			{
 				return true;
 			}
