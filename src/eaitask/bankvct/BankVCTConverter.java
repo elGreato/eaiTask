@@ -87,13 +87,6 @@ public class BankVCTConverter {
 
 		String address = c.getStreetname() + ", " + c.getZip() + " " + c.getTown();
 
-		// get the tool six class ... we need IBAN here for country code
-		ch.sic.ibantool.Main ibanClass = new ch.sic.ibantool.Main();
-		ch.sic.ibantool.RecordIban iban;
-
-		iban = ibanClass.IBANConvert(new StringBuffer(Long.valueOf(c.getClearing()).toString()),
-				new StringBuffer(Long.valueOf(c.getAccountnumber()).toString()));
-
 		Status status;
 		if (c.getTotal() < 10000)
 			status = Status.BRONZE;
