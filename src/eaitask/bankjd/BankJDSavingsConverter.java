@@ -50,7 +50,7 @@ public class BankJDSavingsConverter {
 		{
 			for(TargetCustomer tc : targetCustomers)
 			{
-				if(id == tc.getCid() && tc.getFirstname().matches("^[A-Z]\\.$"))
+				if(id == tc.getCid() && tc.getFirstname().matches("^[[A-Z][\\.][ ]?]*$"))
 				{
 					targetCustomers.get(id).setFirstname(targetCustomer.getFirstname());
 				}

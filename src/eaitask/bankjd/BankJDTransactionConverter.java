@@ -64,6 +64,18 @@ public class BankJDTransactionConverter {
 			targetCustomer.setCid(id);
 			targetCustomers.add(targetCustomer);
 		}
+		else 
+		{
+			for(TargetCustomer tc : targetCustomers)
+			{
+				if(id == tc.getCid() && tc.getFirstname().matches("^[[A-Z][\\.][ ]?]*$"))
+				{
+					targetCustomers.get(id).setFirstname(targetCustomer.getFirstname());
+				}
+					
+			}
+			
+		}
 	}
 
 

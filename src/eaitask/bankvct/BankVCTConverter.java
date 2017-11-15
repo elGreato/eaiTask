@@ -68,20 +68,25 @@ public class BankVCTConverter {
 		lastName = Utils.trim(lastName);
 		String address = c.getStreetname() + ", " + c.getZip() + " " + c.getTown();
 
-		/*Status status;
-		if (c.getTotal() < 10000)
-			status = Status.BRONZE;
-		else if (c.getTotal() >= 10000 && c.getTotal() < 1000000)
-			status = Status.SILBER;
-		else
-			status = Status.GOLD;*/
 		String countryCode = new String();
-		for(String cc : Locale.getISOCountries())
+		while (countryCode.equals("")||countryCode == null)
 		{
-			if((new Locale("",cc)).getDisplayCountry(new Locale("de","CH")).toLowerCase().equals(c.getState().toLowerCase())||
-					(new Locale("",cc)).getDisplayCountry(new Locale("en_US","CH")).toLowerCase().equals(c.getState().toLowerCase()))
+			for(String cc : Locale.getISOCountries())
 			{
-				countryCode = cc;
+				if((new Locale("",cc)).getDisplayCountry(new Locale("de","CH")).toLowerCase().equals(c.getState().toLowerCase())||
+						(new Locale("",cc)).getDisplayCountry(new Locale("en_US","CH")).toLowerCase().equals(c.getState().toLowerCase()))
+				{
+					countryCode = cc;
+					break;
+				}
+			}
+			if((countryCode == null||countryCode.equals("")) && c.getState().startsWith("The "))
+			{
+				c.setState(c.getState().substring(c.getState().indexOf(" ")+1));
+			}
+			else
+			{
+				break;
 			}
 		}
 
