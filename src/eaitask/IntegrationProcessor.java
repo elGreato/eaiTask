@@ -24,6 +24,7 @@ import eaitask.bankjd.BankJDTransaction;
 import eaitask.bankjd.BankJDTransactionConverter;
 import eaitask.bankvct.BankVCTAccount;
 import eaitask.bankvct.BankVCTConverter;
+import eaitask.targetsystem.Status;
 import eaitask.targetsystem.TargetAccount;
 import eaitask.targetsystem.TargetCustomer;
 
@@ -60,7 +61,9 @@ public class IntegrationProcessor {
 		BankJDTransactionConverter jdTransactionConverter = new BankJDTransactionConverter();
 		jdTransactionConverter.convert(jdTransactions,targetCustomers, targetAccounts,targetCustomers.get(targetCustomers.size()-1).getCid()+1);
 		
-		Collections.sort((List<TargetAccount>)targetAccounts);;
+		Collections.sort((List<TargetAccount>)targetAccounts);
+		
+		calculateStatus();
 		
 		printCustomers();
 		printAccounts();
@@ -71,6 +74,39 @@ public class IntegrationProcessor {
 
 		
 	
+	private void calculateStatus() {
+		for(TargetCustomer tu:targetCustomers)
+		{
+			int noAccounts = 0;
+			int totalBalance = 0;
+			for(TargetAccount ta:targetAccounts)
+			{
+				if(ta.getCid() == tu.getCid())
+				{
+					noAccounts++;
+					totalBalance += ta.getAccountbalance();
+				}
+				else if(ta.getCid()>tu.getCid())
+				{
+					break;
+				}
+				
+			}
+			if(noAccounts >1 || tu.getStatus() == null)
+			{
+				if (totalBalance < 10000)
+					tu.setStatus(Status.BRONZE);
+				else if (totalBalance >= 10000 && totalBalance < 1000000)
+					tu.setStatus(Status.SILBER);
+				else
+					tu.setStatus(Status.GOLD);
+			}
+		}
+		
+	}
+
+
+
 	private void printAccounts() {
 		System.out.println("********************");
 		System.out.println("ACCOUNTS TABLE");

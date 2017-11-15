@@ -43,12 +43,9 @@ public class TargetCustomer {
 			TargetCustomer compCustomer = (TargetCustomer)o;
 			String street1 = getStreet(this.getAddress());
 			String street2 = getStreet(compCustomer.getAddress());
-			String zip1 = getZip(compCustomer.getAddress());
+			String zip1 = getZip(this.getAddress());
 			String zip2 = getZip(compCustomer.getAddress());
-			if(!compCustomer.getFirstname().isEmpty()&&
-					!compCustomer.getLastname().isEmpty()&&
-					!compCustomer.getAddress().isEmpty()&&
-					compCustomer.getLastname().toLowerCase().equals(this.getLastname().toLowerCase())&&
+			if(compCustomer.getLastname().toLowerCase().equals(this.getLastname().toLowerCase())&&
 					street1.equals(street2)&&zip1.equals(zip2))
 			{
 				return true;
@@ -64,21 +61,28 @@ public class TargetCustomer {
 			return super.equals(o);
 		}
 	}
-	private String getZip(String address2) {
-		return address.substring(address.indexOf(",")+1, address.indexOf(" ", address.indexOf(",")+2));
+	private String getZip(String input) {
+
+		return input.substring(input.indexOf(",")+1, input.indexOf(" ", input.indexOf(",")+2));
+		
 	}
-	private String getStreet(String address) {
+	private String getStreet(String input) {
 		int index = 0;
-		for(int i =0;i<address.length();i++)
+		for(int i =0;i<input.length();i++)
 		{
-			if(address.substring(i,i+1).matches("^[0-9]"))
+			if(input.substring(i,i+1).matches("[0-9]"))
 			{
 				
+				index = i-1;
+				break;
+			}
+			if(input.substring(i, i+1).matches("[\\.,]"))
+			{
 				index = i;
 				break;
 			}
 		}
-		return address.substring(0,index-1);
+		return input.substring(0,index);
 	}
 	public int getCid() {
 		return cid;
@@ -134,5 +138,6 @@ public class TargetCustomer {
 		System.out.println("Last name: " + lastname);
 		System.out.println("Address: " + address);
 		System.out.println("Country Code: " + countrycode);
+		System.out.println("Status: " + Status.print(status));
 	}
 }

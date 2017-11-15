@@ -3,6 +3,7 @@ package eaitask.bankjd;
 import java.util.ArrayList;
 
 import eaitask.IntegrationProcessor;
+import eaitask.targetsystem.Status;
 import eaitask.targetsystem.TargetAccount;
 import eaitask.targetsystem.TargetCustomer;
 import eaitask.targetsystem.TypeOfAccount;
@@ -39,6 +40,18 @@ public class BankJDTransactionConverter {
 
 	private TargetCustomer createTargetUser(BankJDTransaction account) {
 		TargetCustomer targetCustomer = new TargetCustomer(account.getFirstname(), account.getLastname(),account.getAddress(),account.getCountry());
+		if(account.getRanking()<=1)
+		{
+			targetCustomer.setStatus(Status.BRONZE);
+		}
+		else if (account.getRanking()<=3)
+		{
+			targetCustomer.setStatus(Status.SILBER);
+		}
+		else
+		{
+			targetCustomer.setStatus(Status.GOLD);
+		}
 		return targetCustomer;
 	}
 	private void addToTargetSystem(TargetCustomer targetCustomer,

@@ -7,6 +7,7 @@ import java.util.Locale;
 
 import ch.sic.ibantool.RecordIban;
 import eaitask.IntegrationProcessor;
+import eaitask.Utils;
 import eaitask.targetsystem.Status;
 import eaitask.targetsystem.TargetAccount;
 import eaitask.targetsystem.TargetCustomer;
@@ -27,7 +28,11 @@ public class BankVCTConverter {
 
 		for (BankVCTAccount c : vctAccounts) {
 			if (!c.getTypeofcustomer().equalsIgnoreCase("firma")) {
-				c.setCustomername(removeSymbols(c.getCustomername()));
+				c.setStreetname(Utils.trim(c.getStreetname()));
+				c.setCustomername(Utils.trim(c.getCustomername()));
+				c.setState(Utils.trim(c.getState()));
+				c.setTown(Utils.trim(c.getTown()));
+				c.setZip(Utils.trim(c.getZip()));
 				TargetCustomer targetCustomer = createTargetCustomer(c);
 				TargetAccount targetAccount = createTargetAccount(c);
 				addToTargetSystem(targetCustomer, targetAccount);
@@ -38,31 +43,38 @@ public class BankVCTConverter {
 	}
 
 
-	private String removeSymbols(String input) {
-		return input;
-	}
-
-
 	private TargetCustomer createTargetCustomer(BankVCTAccount c) {
 
 		int id = c.getCustomerID();
 		String name = c.getCustomername();
 		String[] nameParts = name.split(" ");
-		String lastName = nameParts[nameParts.length - 1];
-		String firstName = "";
-		for (int i = 0; i < nameParts.length - 1; i++) {
-			firstName += nameParts[i] + " ";
+		String lastName = new String();
+		String firstName = new String();
+		for (int i = 0; i < nameParts.length; i++) {
+			if(nameParts[i].equals("van")||nameParts[i].equals("von")||nameParts[i].equals("de")|| i+1 == nameParts.length)
+			{
+				for(int j = i;j< nameParts.length;j++)
+				{
+					lastName += nameParts[j] + " ";
+				}
+				break;
+			}
+			else if(!nameParts[i].equals("Dr.")&&!nameParts[i].equals("Prof."))
+			{
+				firstName += nameParts[i] + " ";
+			}
 		}
-
+		firstName= Utils.trim(firstName);
+		lastName = Utils.trim(lastName);
 		String address = c.getStreetname() + ", " + c.getZip() + " " + c.getTown();
 
-		Status status;
+		/*Status status;
 		if (c.getTotal() < 10000)
 			status = Status.BRONZE;
 		else if (c.getTotal() >= 10000 && c.getTotal() < 1000000)
 			status = Status.SILBER;
 		else
-			status = Status.GOLD;
+			status = Status.GOLD;*/
 		String countryCode = new String();
 		for(String cc : Locale.getISOCountries())
 		{
@@ -73,7 +85,8 @@ public class BankVCTConverter {
 			}
 		}
 
-		TargetCustomer customer = new TargetCustomer(id, firstName, lastName, address, countryCode, status);
+		TargetCustomer customer = new TargetCustomer(firstName, lastName, address, countryCode);
+		customer.setCid(id);
 
 		return customer;
 	}
