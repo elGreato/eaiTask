@@ -11,20 +11,29 @@ public class TargetCustomer {
 	public TargetCustomer(String firstname, String lastname,
 			String address, String countrycode) {
 		super();
-		this.firstname = firstname;
-		this.lastname = lastname;
-		this.address = address;
+		this.firstname = removeUmlauts(firstname);
+		this.lastname = removeUmlauts(lastname);
+		this.address = removeUmlauts(address);
 		this.countrycode = countrycode;
+	}
+	private String removeUmlauts(String input) {
+		input = input.replace("ä", "ae");
+		input = input.replace("ö", "oe");
+		input = input.replace("ü", "ue");
+		return input;	
 	}
 	public TargetCustomer(int cid, String firstname, String lastname,
 			String address, String countrycode, Status status) {
 		super();
 		this.cid = cid;
-		this.firstname = firstname;
-		this.lastname = lastname;
-		this.address = address;
+		this.firstname = removeUmlauts(firstname);
+		this.lastname = removeUmlauts(lastname);
+		this.address = removeUmlauts(address);
 		this.countrycode = countrycode;
 		this.status = status;
+		removeUmlauts(this.firstname);
+		removeUmlauts(this.lastname);
+		removeUmlauts(this.address);
 	}
 	@Override
 	public boolean equals(Object o)
@@ -32,12 +41,15 @@ public class TargetCustomer {
 		if(o instanceof TargetCustomer)
 		{
 			TargetCustomer compCustomer = (TargetCustomer)o;
+			String street1 = getStreet(this.getAddress());
+			String street2 = getStreet(compCustomer.getAddress());
+			String zip1 = getZip(compCustomer.getAddress());
+			String zip2 = getZip(compCustomer.getAddress());
 			if(!compCustomer.getFirstname().isEmpty()&&
 					!compCustomer.getLastname().isEmpty()&&
 					!compCustomer.getAddress().isEmpty()&&
-					compCustomer.getFirstname().charAt(0) == this.getFirstname().charAt(0)&&
-					compCustomer.getLastname().equals(this.getLastname())&&
-					compCustomer.getAddress().equals(this.getAddress()))
+					compCustomer.getLastname().toLowerCase().equals(this.getLastname().toLowerCase())&&
+					street1.equals(street2)&&zip1.equals(zip2))
 			{
 				return true;
 			}
@@ -51,6 +63,22 @@ public class TargetCustomer {
 		{
 			return super.equals(o);
 		}
+	}
+	private String getZip(String address2) {
+		return address.substring(address.indexOf(",")+1, address.indexOf(" ", address.indexOf(",")+2));
+	}
+	private String getStreet(String address) {
+		int index = 0;
+		for(int i =0;i<address.length();i++)
+		{
+			if(address.substring(i,i+1).matches("^[0-9]"))
+			{
+				
+				index = i;
+				break;
+			}
+		}
+		return address.substring(0,index-1);
 	}
 	public int getCid() {
 		return cid;

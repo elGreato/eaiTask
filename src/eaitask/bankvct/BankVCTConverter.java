@@ -24,10 +24,10 @@ public class BankVCTConverter {
 		this.targetCustomers = targetUsers;
 		this.targetAccounts = targetAccounts;
 
-		//readData();
 
 		for (BankVCTAccount c : vctAccounts) {
 			if (!c.getTypeofcustomer().equalsIgnoreCase("firma")) {
+				c.setCustomername(removeSymbols(c.getCustomername()));
 				TargetCustomer targetCustomer = createTargetCustomer(c);
 				TargetAccount targetAccount = createTargetAccount(c);
 				addToTargetSystem(targetCustomer, targetAccount);
@@ -37,42 +37,11 @@ public class BankVCTConverter {
 
 	}
 
-	// Read VCT accounts -- can be removed later
-//	private void readData() {
-//
-//		String csv = "/BankVCT.csv";
-//		BufferedReader br = null;
-//		String line = "";
-//		String cvsSplitBy = ",";
-//
-//		try {
-//
-//			br = new BufferedReader(new FileReader(csv));
-//			while ((line = br.readLine()) != null) {
-//
-//				// use comma as separator
-//				String[] result = line.split(cvsSplitBy);
-//				BankVCTAccount account = new BankVCTAccount(Integer.parseInt(result[0]), result[1], result[2], result[3], 
-//						result[4], result[5], result[6], Long.parseLong(result[7]), Float.parseFloat(result[8]), Long.parseLong(result[9]));
-//				
-//				vctAccounts.add(account);
-//				
-//
-//			}
-//
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		} finally {
-//			if (br != null) {
-//				try {
-//					br.close();
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//
-//			}
-//		}
-//	}
+
+	private String removeSymbols(String input) {
+		return input;
+	}
+
 
 	private TargetCustomer createTargetCustomer(BankVCTAccount c) {
 
