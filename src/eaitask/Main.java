@@ -8,7 +8,6 @@ import ch.fhnw.www.wi.eai.bankjd.BankJDProxy;
 public class Main {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		IntegrationProcessor ip = new IntegrationProcessor();
 		ip.executeIntegration();
 		BankJD bankJDData = new BankJDProxy();
@@ -16,7 +15,6 @@ public class Main {
 			bankJDData.printSavings();
 			bankJDData.printTransaction();
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

@@ -1,14 +1,12 @@
 package eaitask.bankvct;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
+
 import java.util.ArrayList;
 import java.util.Locale;
 
 import ch.sic.ibantool.RecordIban;
 import eaitask.IntegrationProcessor;
 import eaitask.Utils;
-import eaitask.targetsystem.Status;
 import eaitask.targetsystem.TargetAccount;
 import eaitask.targetsystem.TargetCustomer;
 import eaitask.targetsystem.TypeOfAccount;
