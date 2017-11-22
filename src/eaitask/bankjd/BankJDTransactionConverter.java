@@ -12,16 +12,22 @@ public class BankJDTransactionConverter {
 	private ArrayList<BankJDTransaction> jdTransactions;
 	private ArrayList<TargetCustomer> targetCustomers;
 	private ArrayList<TargetAccount> targetAccounts;
+	private ArrayList<TargetCustomer> customersForManualCheck;
 	private int nextID;
+	private int vctHighestID;
 	public void convert(
 			ArrayList<BankJDTransaction> jdTransactions,
 			ArrayList<TargetCustomer> targetCustomers,
 			ArrayList<TargetAccount> targetAccounts,
-			int nextID) {
+			int nextID,
+			int vctHighestID, 
+			ArrayList<TargetCustomer> customersForManualCheck) {
 		this.jdTransactions = jdTransactions;
 		this.targetCustomers = targetCustomers;
 		this.targetAccounts = targetAccounts;
 		this.nextID = nextID;
+		this.vctHighestID = vctHighestID;
+		this.customersForManualCheck = customersForManualCheck;
 		for(BankJDTransaction account: jdTransactions)
 		{
 			TargetCustomer targetCustomer = createTargetUser(account);
@@ -70,7 +76,12 @@ public class BankJDTransactionConverter {
 			{
 				if(id == tc.getCid() && tc.getFirstname().matches("^[[A-Z][\\.][ ]?]*$"))
 				{
-					targetCustomers.get(id).setFirstname(targetCustomer.getFirstname());
+					tc.setFirstname(targetCustomer.getFirstname());
+				}
+				if(id == tc.getCid() && id<=vctHighestID&&!targetCustomer.getLastname().equals(tc.getLastname()))
+				{
+					tc.setFirstname(targetCustomer.getFirstname());
+					tc.setLastname(targetCustomer.getLastname());
 				}
 					
 			}
@@ -79,13 +90,44 @@ public class BankJDTransactionConverter {
 	}
 
 
-
 	private int getID(TargetCustomer userProcessed, TargetAccount targetAccount) {
+		
 		for (TargetCustomer listUser : targetCustomers)
 		{
-			if(userProcessed.equals(listUser))
+			if(userProcessed.checkEquality(listUser)==3)
 			{
 				return listUser.getCid();
+			}
+			else if(listUser.getCid() <= vctHighestID&&listUser.getFirstname().contains(" "))
+			{
+				String[] firstNames = listUser.getFirstname().split(" ");
+				for(int i = firstNames.length-1; i>=0; i--)
+				{
+					String newFirstName = new String();
+					for (int j = 0; j<i;j++)
+					{
+						newFirstName += firstNames[j] + " ";
+					}
+					newFirstName.trim();
+					String newLastName = firstNames[i] + " " + listUser.getLastname();
+					TargetCustomer editedUser = new TargetCustomer(newFirstName,newLastName, listUser.getAddress(), listUser.getCountrycode());
+					if(userProcessed.checkEquality(editedUser) == 3)
+					{
+						return listUser.getCid();
+					}
+					else if(userProcessed.checkEquality(editedUser) == 2 && 
+							userProcessed.getLastname().equalsIgnoreCase(editedUser.getLastname()))
+					{
+						customersForManualCheck.add(userProcessed);
+						customersForManualCheck.add(editedUser);
+					}
+				}
+
+			}
+			else if(userProcessed.checkEquality(listUser) == 2)
+			{
+				customersForManualCheck.add(userProcessed);
+				customersForManualCheck.add(listUser);
 			}
 		}
 		return nextID++;

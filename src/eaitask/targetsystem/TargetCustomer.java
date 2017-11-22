@@ -35,31 +35,30 @@ public class TargetCustomer {
 		removeUmlauts(this.lastname);
 		removeUmlauts(this.address);
 	}
-	@Override
-	public boolean equals(Object o)
+	public int checkEquality(TargetCustomer compCustomer)
 	{
-		if(o instanceof TargetCustomer)
+		int equalityMeasure = 0;
+		String street1 = getStreet(this.getAddress());
+		String street2 = getStreet(compCustomer.getAddress());
+		String zip1 = getZip(this.getAddress());
+		String zip2 = getZip(compCustomer.getAddress());
+		if(compCustomer.getLastname().toLowerCase().equals(this.getLastname().toLowerCase())){
+			equalityMeasure +=1;
+		}
+				
+		if(street1.equals(street2))
 		{
-			TargetCustomer compCustomer = (TargetCustomer)o;
-			String street1 = getStreet(this.getAddress());
-			String street2 = getStreet(compCustomer.getAddress());
-			String zip1 = getZip(this.getAddress());
-			String zip2 = getZip(compCustomer.getAddress());
-			if(compCustomer.getLastname().toLowerCase().equals(this.getLastname().toLowerCase())&&
-					street1.equals(street2)&&zip1.equals(zip2))
-			{
-				return true;
-			}
-			else
-			{
-				return false;
-			}
+			equalityMeasure +=1;
+		}
+		if(zip1.equals(zip2))
+		{
+			equalityMeasure +=1;
+		}
+		
+		return equalityMeasure;
+		
 					
-		}
-		else
-		{
-			return super.equals(o);
-		}
+		
 	}
 	private String getZip(String input) {
 

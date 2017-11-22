@@ -39,6 +39,8 @@ public class IntegrationProcessor {
 	private ArrayList<TargetCustomer> targetCustomers;
 	private ArrayList<TargetAccount> targetAccounts;
 	
+	private ArrayList<TargetCustomer> customersForManualCheck;
+	
 	public static double dollarExchangeRate = 1; //CHANGE DEC 1
 	public static double euroExchangeRage = 0.85; //CHANGE DEC 1
 	
@@ -47,19 +49,27 @@ public class IntegrationProcessor {
 		jdSavings = new ArrayList<BankJDSavings>();
 		jdTransactions = new ArrayList<BankJDTransaction>();
 		vctAccounts = new ArrayList<BankVCTAccount>();
-
+		
 		retrieveBankJDData();
 		retrieveBankVCTData();
 		
 		targetCustomers = new ArrayList<TargetCustomer>();
 		targetAccounts = new ArrayList<TargetAccount>();
+		customersForManualCheck = new ArrayList<TargetCustomer>();
 		
 		BankVCTConverter vctConverter = new BankVCTConverter();
 		vctConverter.convert(vctAccounts, targetCustomers, targetAccounts);
 		BankJDSavingsConverter jdSavingsConverter = new BankJDSavingsConverter();
-		jdSavingsConverter.convert(jdSavings, targetCustomers, targetAccounts, jdTransactions.get(1).getBIC(),vctAccounts.get(vctAccounts.size()-1).getCustomerID()+1);		
+		jdSavingsConverter.convert(jdSavings, targetCustomers, targetAccounts, 
+				jdTransactions.get(1).getBIC(),
+				vctAccounts.get(vctAccounts.size()-1).getCustomerID()+1,
+				vctAccounts.get(vctAccounts.size()-1).getCustomerID(),
+				customersForManualCheck);		
 		BankJDTransactionConverter jdTransactionConverter = new BankJDTransactionConverter();
-		jdTransactionConverter.convert(jdTransactions,targetCustomers, targetAccounts,targetCustomers.get(targetCustomers.size()-1).getCid()+1);
+		jdTransactionConverter.convert(jdTransactions,targetCustomers, targetAccounts,
+				targetCustomers.get(targetCustomers.size()-1).getCid()+1,
+				vctAccounts.get(vctAccounts.size()-1).getCustomerID(),
+				customersForManualCheck);
 		
 		Collections.sort((List<TargetAccount>)targetAccounts);
 		
@@ -68,12 +78,48 @@ public class IntegrationProcessor {
 		printCustomers();
 		printAccounts();
 		
+		printCustomersToManuallyAssign();
+		
 		
 
 	}
 
 		
 	
+	private void printCustomersToManuallyAssign() {
+		System.out.println("********************");
+		System.out.println("MANUAL CHECK FOR CUSTOMERS (2/3 HITS)");
+		System.out.println("********************");
+		System.out.println("***********");
+		System.out.println();
+		int index = 0;
+		for(TargetCustomer tu: customersForManualCheck)
+		{
+			if(index % 2 == 0)
+			{ 
+				System.out.println("Problem no.: " + (index/2+1));
+				System.out.println();
+				tu.print();
+				System.out.println();
+				
+			}
+			else
+			{
+				tu.print();
+				System.out.println();
+				System.out.println("***********");
+				System.out.println();
+			}
+			index++;
+			
+		}
+		System.out.println("********************");
+		System.out.println();
+		
+	}
+
+
+
 	private void calculateStatus() {
 		for(TargetCustomer tu:targetCustomers)
 		{
