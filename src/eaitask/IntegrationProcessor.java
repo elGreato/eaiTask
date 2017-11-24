@@ -42,7 +42,7 @@ public class IntegrationProcessor {
 	private ArrayList<TargetCustomer> customersForManualCheck;
 	
 	public static double dollarExchangeRate = 1; //CHANGE DEC 1
-	public static double euroExchangeRage = 0.85; //CHANGE DEC 1
+	public static double euroExchangeRate = 0.85; //CHANGE DEC 1
 	
 	public void executeIntegration() {
 		
