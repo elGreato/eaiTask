@@ -41,8 +41,8 @@ public class IntegrationProcessor {
 	
 	private ArrayList<TargetCustomer> customersForManualCheck;
 	
-	public static double dollarExchangeRate = 1; //CHANGE DEC 1
-	public static double euroExchangeRate = 0.85; //CHANGE DEC 1
+	public static double dollarExchangeRate = 1.0245d;
+	public static double euroExchangeRate = 0.8612d; 
 	
 	public void executeIntegration() {
 		
@@ -204,8 +204,7 @@ public class IntegrationProcessor {
 			cn.close();
 			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("Failed to connect to database");
 		}
 		
 	}
