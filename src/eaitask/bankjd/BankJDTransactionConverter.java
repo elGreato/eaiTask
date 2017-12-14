@@ -83,6 +83,10 @@ public class BankJDTransactionConverter {
 					tc.setFirstname(targetCustomer.getFirstname());
 					tc.setLastname(targetCustomer.getLastname());
 				}
+				if(id == tc.getCid() && !targetCustomer.getCountrycode().equals(tc.getCountrycode()))
+				{
+					tc.setCountrycode(targetCustomer.getCountrycode());
+				}
 					
 			}
 			
