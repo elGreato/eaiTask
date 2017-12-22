@@ -75,6 +75,10 @@ public class IntegrationProcessor {
 		
 		calculateStatus();
 		
+		System.out.println("*************************");
+		System.out.println("TARGET SYSTEM");
+		System.out.println("*************************");
+		System.out.println();
 		printCustomers();
 		printAccounts();
 		
