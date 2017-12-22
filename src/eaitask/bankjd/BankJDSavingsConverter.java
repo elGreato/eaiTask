@@ -117,7 +117,7 @@ public class BankJDSavingsConverter {
 		String accountNo = Long.valueOf(account.getAccountnumber()).toString();
 		RecordIban recordiban = ibanclass.IBANConvert(new StringBuffer(BIC), new StringBuffer(accountNo)); 
 		StringBuffer iban = recordiban.Iban;
-		float accountBalance =(float)(account.getAccountstatus()*(account.getInterestrate()+1)*IntegrationProcessor.euroExchangeRate);
+		float accountBalance = (float)(Math.round(account.getAccountstatus()*(account.getInterestrate()+1)*IntegrationProcessor.euroExchangeRate*100))/100;
 		while(iban.length() == 0&&accountNo.length()<=16)
 		{
 			accountNo = Utils.completeAccountNumber(accountNo);

@@ -40,7 +40,7 @@ public class BankJDTransactionConverter {
 
 	private TargetAccount createTargetAccount(BankJDTransaction account) {
 		
-		TargetAccount targetAccount = new TargetAccount(account.getIbannumber(), (float) (account.getAccountstatus()*IntegrationProcessor.euroExchangeRate), TypeOfAccount.TRANSACTION);
+		TargetAccount targetAccount = new TargetAccount(account.getIbannumber(), (float)(Math.round(account.getAccountstatus()*IntegrationProcessor.euroExchangeRate*100))/100, TypeOfAccount.TRANSACTION);
 		return targetAccount;
 	}
 

@@ -112,7 +112,7 @@ public class BankVCTConverter {
 		float accountBalance = c.getTotal();
 		TypeOfAccount type = TypeOfAccount.TRANSACTION;
 
-		TargetAccount ta = new TargetAccount(id, iban.Iban.toString(), (float) (accountBalance*IntegrationProcessor.dollarExchangeRate), type);
+		TargetAccount ta = new TargetAccount(id, iban.Iban.toString(), (float) (Math.round(accountBalance*IntegrationProcessor.dollarExchangeRate*100))/100, type);
 
 		return ta;
 
