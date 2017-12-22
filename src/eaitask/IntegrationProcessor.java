@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Scanner;
 
 import javax.xml.rpc.holders.FloatWrapperHolder;
 import javax.xml.rpc.holders.IntegerWrapperHolder;
@@ -29,8 +30,8 @@ import eaitask.targetsystem.TargetAccount;
 import eaitask.targetsystem.TargetCustomer;
 
 public class IntegrationProcessor {
-	private String dbUsername = "root";
-	private String dbPassword = "root";
+	private String dbUsername = "username";
+	private String dbPassword = "password";
 	
 	private ArrayList<BankJDSavings> jdSavings;
 	private ArrayList<BankJDTransaction> jdTransactions;
@@ -45,12 +46,15 @@ public class IntegrationProcessor {
 	public static double euroExchangeRate = 1.1613d; 
 	
 	public void executeIntegration() {
-		
+		System.out.println("*************************");
+		System.out.println("Welcome");
+		System.out.println("*************************");
 		jdSavings = new ArrayList<BankJDSavings>();
 		jdTransactions = new ArrayList<BankJDTransaction>();
 		vctAccounts = new ArrayList<BankVCTAccount>();
 		
 		retrieveBankJDData();
+		getVCTCredentials();
 		retrieveBankVCTData();
 		
 		targetCustomers = new ArrayList<TargetCustomer>();
@@ -90,6 +94,21 @@ public class IntegrationProcessor {
 
 		
 	
+	private void getVCTCredentials() {
+		Scanner sc = new Scanner(System.in);
+		System.out.println("********************");
+		System.out.println("Please enter the username for the BankVCT database");
+		System.out.println("********************");
+		dbUsername = sc.nextLine();
+		System.out.println("********************");
+		System.out.println("Please enter the password for the BankVCT database");
+		System.out.println("********************");
+		dbPassword = sc.nextLine();
+		sc.close();
+	}
+
+
+
 	private void printCustomersToManuallyAssign() {
 		System.out.println("********************");
 		System.out.println("MANUAL CHECK FOR CUSTOMERS (2/3 HITS)");
