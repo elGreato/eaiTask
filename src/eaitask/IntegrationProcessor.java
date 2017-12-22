@@ -41,8 +41,8 @@ public class IntegrationProcessor {
 	
 	private ArrayList<TargetCustomer> customersForManualCheck;
 	
-	public static double dollarExchangeRate = 1.0245d;
-	public static double euroExchangeRate = 0.8612d; 
+	public static double dollarExchangeRate = 0.9761d;
+	public static double euroExchangeRate = 1.1613d; 
 	
 	public void executeIntegration() {
 		
